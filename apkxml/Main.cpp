@@ -1,18 +1,15 @@
-
-#include "zlib/zlib.h"
-#include <iostream>
+#include <stdio.h>
 #include <io.h>
-#include "zlib/unzip.h"
-#include <cstring>
 #include <fstream>
 #include <direct.h>
-using namespace std;
 
+#include "zlib/zlib.h"
+#include "zlib/unzip.h"
+using namespace std;
 #pragma comment (lib,"zlibwapi.lib")
 
 int createMultipleDirectory(char* file_path)
 {
-	
 	int i = 0;
 	int iRet;
 	int iLen = strlen(file_path);
@@ -38,9 +35,7 @@ int createMultipleDirectory(char* file_path)
 			file_path[i] = '/';
 		}
 	}
-
 	return 0;
-
 }
 
 int extract_currentfile(unzFile zfile, char * extractdirectory)
