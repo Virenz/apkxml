@@ -13,10 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\manifest">
+      <UniqueIdentifier>{7c931d0d-798c-498f-bbea-f45306c78d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\manifest">
+      <UniqueIdentifier>{f5a4b315-6656-4249-91ee-0303151d9383}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="manifest\manifestdata.cpp">
+      <Filter>源文件\manifest</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="manifest\manifestdata.h">
+      <Filter>头文件\manifest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
