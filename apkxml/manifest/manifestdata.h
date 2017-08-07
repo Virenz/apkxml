@@ -23,4 +23,4 @@ extern std::string receiver_list[1024];
 
 extern std::string library_list[1024];
 
-void ManifestData(std::string manifest_path);
+void ManifestData(char* manifest_path);

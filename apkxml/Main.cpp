@@ -5,6 +5,7 @@
 
 #include "zlib/zlib.h"
 #include "zlib/unzip.h"
+#include "manifest\manifestdata.h"
 
 using namespace std;
 #pragma comment (lib,"zlibwapi.lib")
@@ -176,7 +177,8 @@ int main()
 	//¹Ø±ÕÑ¹ËõÎÄ¼þ
 	unzClose(zfile);
 
-	GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
+	//GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
+	ManifestData("extract/manifest.xml");
 
 	system("pause");
 	return 0;

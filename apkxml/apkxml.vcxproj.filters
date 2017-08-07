@@ -19,6 +19,12 @@
     <Filter Include="源文件\manifest">
       <UniqueIdentifier>{f5a4b315-6656-4249-91ee-0303151d9383}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\tinyxml2">
+      <UniqueIdentifier>{4ac3fbcc-b8b5-49dc-8651-89f429ac7507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\tinyxml2">
+      <UniqueIdentifier>{817e8bcc-fff5-4f88-8fe5-053577f72136}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -27,10 +33,16 @@
     <ClCompile Include="manifest\manifestdata.cpp">
       <Filter>源文件\manifest</Filter>
     </ClCompile>
+    <ClCompile Include="tinyxml2\tinyxml2.cpp">
+      <Filter>源文件\tinyxml2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manifest\manifestdata.h">
       <Filter>头文件\manifest</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2\tinyxml2.h">
+      <Filter>头文件\tinyxml2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

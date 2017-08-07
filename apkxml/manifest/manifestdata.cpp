@@ -1,313 +1,115 @@
 #include <iostream>
 #include <string>
 #include "manifestdata.h"
-#include "tinyxml2/tinyxml2.h"
+#include "../tinyxml2/tinyxml2.h"
 
 using namespace std;
 
-string	minsdk;
-string	maxsdk;
-string	targetsdk;
-
-string	package;
-string	androidversioncode;
-string	androidversionname;
-
-string	activity_list[1024];
-string	mainact;
-
-string service_list[1024];
-
-string provider_list[1024];
-
-string receiver_list[1024];
-
-string library_list[1024];
-
-Permission dvm_permission_list[MANI_PERMISSIONS_SUM];
-
-
-void ManifestData(string manifest_path)
+void ManifestData(char* manifest_path)
 {
-	TiXmlDocument doc;
-	if (loadXML(manifest_path, doc) != 0)
+	tinyxml2::XMLDocument doc;
+	
+	if (doc.LoadFile(manifest_path) != 0)
 		return;
-	TiXmlElement	* root = doc.FirstChildElement();
-	int		sum = 0;
-	TiXmlElement	* elementsList[1500];
-	int		temp_sum = 0;
-	TiXmlElement	*templist[1500];
-	TiXmlAttribute	*attr;
-	TiXmlAttribute	*temp_attr;
-	/* SDK */
-	if (getElementsByName(root, sum, elementsList, 1500, "uses-sdk") == 0)
-	{
-		int i = 0;
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "android:minSdkVersion") == 0)
-			{
-				minsdk = attr->Value();
-			}
-			if (getAttributeByName(elementsList[i], attr, "android:maxSdkVersion") == 0)
-			{
-				maxsdk = attr->Value();
-			}
-			if (getAttributeByName(elementsList[i], attr, "android:targetSdkVersion") == 0)
-			{
-				targetsdk = attr->Value();
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-			elementsList[i] = NULL;
-		attr = NULL;
-		sum = 0;
-	}
-	/* MANIFEST */
-	if (getElementsByName(root, sum, elementsList, 1500, "manifest") == 0)
-	{
-		int i = 0;
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "package") == 0)
-			{
-				package = attr->Value();
-			}
-			if (getAttributeByName(elementsList[i], attr, "android:versionCode") == 0)
-			{
-				androidversioncode = attr->Value();
-			}
-			if (getAttributeByName(elementsList[i], attr, "android:versionName") == 0)
-			{
-				androidversionname = attr->Value();
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-			templist[i] = NULL;
-		}
-		attr = NULL;
-		sum = 0;
-	}
-	/* ACTIVITY */
-	if (getElementsByName(root, sum, elementsList, 1500, "activity") == 0)
-	{
-		int	i = 0;
-		int	p = 0;
-		while (elementsList[i] != NULL)
-		{
-			int j = 0;
-			if (getAttributeByName(elementsList[i], attr, "android:name") == 0)
-			{
-				activity_list[p] = attr->Value();
-				p++;
-			}
-			if (mainact.length() == 0)
-			{
-				if (getElementsByName(elementsList[i], temp_sum, templist, 1500, "action") == 0)
-				{
-					while (templist[j] != NULL)
-					{
-						if (getAttributeByName(templist[j], temp_attr, "android:name") == 0)
-						{
-							if (strcmp(temp_attr->Value(), "android.intent.action.MAIN") == 0)
-							{
-								mainact = attr->Value();
-							}
-						}
-						j++;
-					}
-					for (int i = 0; i < 1500; i++)
-						templist[i] = NULL;
-				}
-			}
-			i++;
-		}
+	tinyxml2::XMLElement* root = doc.FirstChildElement();
 
-		i = 0;
-		temp_attr = NULL;
-		attr = NULL;
-		sum = 0;
-		temp_sum = 0;
-		if (mainact == "")
-		{
-			while (elementsList[i] != NULL)
-			{
-				getAttributeByName(elementsList[i], attr, "android:name");
-				int j = 0;
-				if (getElementsByName(elementsList[i], temp_sum, templist, 1500, "category") == 0)
-				{
-					while (templist[j] != NULL)
-					{
-						if (getAttributeByName(templist[j], temp_attr, "android:name") == 0)
-						{
-							if (strcmp(temp_attr->Value(), "android.intent.category.LAUNCHER") == 0)
-							{
-								mainact = attr->Value();
-							}
-						}
-						j++;
-					}
-					for (int i = 0; i < 1500; i++)
-						templist[i] = NULL;
-				}
-				i++;
-			}
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-			templist[i] = NULL;
-		}
-		attr = NULL;
-		temp_attr = NULL;
-		sum = 0;
-		temp_sum = 0;
+	/* MANIFEST */
+	printf("manifest\n");
+	if (root)
+	{
+		const char* value = root->Attribute("package");
+		printf("package : %s\n", value);
+
+		value = root->Attribute("android:versionCode");
+		printf("android:versionCode : %s\n", value);
+
+		value = root->Attribute("android:versionName");
+		printf("android:versionName : %s\n", value);
 	}
+
+	/* SDK */
+	printf("uses-sdk\n");
+	tinyxml2::XMLElement *surface = root->FirstChildElement("uses-sdk");
+	if (surface)
+	{
+		const char* value = surface->Attribute("android:minSdkVersion");
+		printf("android:minSdkVersion : %s\n", value);
+
+		value = surface->Attribute("android:maxSdkVersion");
+		printf("android:maxSdkVersion : %s\n", value);
+
+		value = surface->Attribute("android:targetSdkVersion");
+		printf("android:targetSdkVersion : %s\n", value);
+	}
+
+	/* ACTIVITY */
+	printf("activity\n");
+	tinyxml2::XMLElement *activity = root->FirstChildElement("application")->FirstChildElement("activity");
+	while (activity)
+	{
+		const char* value = activity->Attribute("android:name");
+		printf("android:name : %s\n", value);
+
+		tinyxml2::XMLElement* actions = activity->FirstChildElement("intent-filter")->FirstChildElement("action");
+		printf("\t action\n");
+		value = actions->Attribute("android:name");
+		printf("\t\t android:name : %s\n", value);
+		
+		activity = activity->NextSiblingElement();
+	}
+	
 	/* SERVICE */
-	if (getElementsByName(root, sum, elementsList, 1500, "service") == 0)
+	printf("service\n");
+	tinyxml2::XMLElement *service = root->FirstChildElement("service");
+	while (service)
 	{
-		int	i = 0;
-		int	p = 0;
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "android:name") == 0)
-			{
-				service_list[p] = attr->Value();
-				p++;
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-		}
-		attr = NULL;
-		sum = 0;
+		const char* value = service->Attribute("android:name");
+		printf("android:name : %s\n", value);
+
+		service = service->NextSiblingElement();
 	}
+	
 	/* PROVIDER */
-	if (getElementsByName(root, sum, elementsList, 1500, "provider") == 0)
+	printf("provider\n");
+	tinyxml2::XMLElement *provider = root->FirstChildElement("provider");
+	while (provider)
 	{
-		int	i = 0;
-		int	p = 0;
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "android:name") == 0)
-			{
-				provider_list[p] = attr->Value();
-				p++;
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-		}
-		attr = NULL;
-		sum = 0;
+		const char* value = provider->Attribute("android:name");
+		printf("android:name : %s\n", value);
+
+		provider = provider->NextSiblingElement();
 	}
+	
 	/* RECERVER */
-	if (getElementsByName(root, sum, elementsList, 1500, "receiver") == 0)
+	printf("receiver\n");
+	tinyxml2::XMLElement *receiver = root->FirstChildElement("receiver");
+	while (receiver)
 	{
-		int	i = 0;
-		int	p = 0;
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "android:name") == 0)
-			{
-				receiver_list[p] = attr->Value();
-				p++;
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-		}
-		attr = NULL;
-		sum = 0;
+		const char* value = receiver->Attribute("android:name");
+		printf("android:name : %s\n", value);
+
+		receiver = receiver->NextSiblingElement();
 	}
+	
 	/* LIBRARY */
-	if (getElementsByName(root, sum, elementsList, 1500, "uses-library") == 0)
+	printf("uses-library\n");
+	tinyxml2::XMLElement *useslibrary = root->FirstChildElement("uses-library");
+	while (useslibrary)
 	{
-		int	i = 0;
-		int	p = 0;
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "android:name") == 0)
-			{
-				library_list[p] = attr->Value();
-				p++;
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-		}
-		attr = NULL;
-		sum = 0;
+		const char* value = useslibrary->Attribute("android:name");
+		printf("android:name : %s\n", value);
+
+		useslibrary = useslibrary->NextSiblingElement();
 	}
+	
 	/* PERMISSION */
-	if (getElementsByName(root, sum, elementsList, 1500, "uses-permission") == 0)
+	printf("uses-permission\n");
+	tinyxml2::XMLElement *usespermission = root->FirstChildElement("uses-permission");
+	while (usespermission)
 	{
-		int	i = 0;
-		int	p = 0;
-		string	permission_list[1024];
-		while (elementsList[i] != NULL)
-		{
-			if (getAttributeByName(elementsList[i], attr, "android:name") == 0)
-			{
-				permission_list[p] = attr->Value();
-				p++;
-			}
-			i++;
-		}
-		for (int i = 0; i < 1500; i++)
-		{
-			elementsList[i] = NULL;
-		}
-		attr = NULL;
-		sum = 0;
-		i = 0;
-		p = 0;
-		Manifest_Permissions m;
-		while (permission_list[i] != "")
-		{
-			int pos = permission_list[i].rfind(".");
-			if (pos != -1)
-			{
-				char *pmn = &permission_list[i][pos];
-				pmn++;
-				Permission *search_p = m.search(pmn);
-				if (search_p != NULL)
-				{
-					int index = 0;
-					bool has = false;
-					while (dvm_permission_list[index].Permission_Name != "")
-					{
-						if (dvm_permission_list[index].Permission_Name == (string)pmn)
-						{
-							has = true;
-							break;
-						}
-						index++;
-					}
-					if (!has)
-					{
-						dvm_permission_list[p] = *search_p;
-						p++;
-					}
-				}
-				else {
-					dvm_permission_list[p] = Permission(pmn, "dangerous", "Unknown permission from android reference", "Unknown permission from android reference");
-					p++;
-				}
-			}
-			i++;
-		}
+		const char* value = usespermission->Attribute("android:name");
+		printf("android:name : %s\n", value);
+
+		usespermission = usespermission->NextSiblingElement();
 	}
 }
