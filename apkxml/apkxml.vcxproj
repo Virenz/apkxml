@@ -111,13 +111,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="axmlprinter\AXmlResourceParser.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="manifest\manifestdata.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="axmlprinter\AttributeSet.h" />
+    <ClInclude Include="axmlprinter\AXmlResourceParser.h" />
+    <ClInclude Include="axmlprinter\IntReader.h" />
+    <ClInclude Include="axmlprinter\StringBlock.h" />
+    <ClInclude Include="axmlprinter\XmlResourceParser.h" />
     <ClInclude Include="manifest\manifestdata.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="axmlprinter\IntReader.cpp" />
+    <None Include="axmlprinter\StringBlock.cpp" />
+    <None Include="axmlprinter\TypedValue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

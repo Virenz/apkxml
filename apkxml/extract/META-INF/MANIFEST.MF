@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Created-By: 1.0 (Android SignApk)
-
-Name: AndroidManifest.xml
-SHA1-Digest: 2IwYHcGK6Ym6B25MoiCEA8kTV+s=
-
-Name: classes.dex
-SHA1-Digest: 65klAq+cL6q5vJCPoAVas3yw6EY=
-

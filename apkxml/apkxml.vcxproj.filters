@@ -25,6 +25,12 @@
     <Filter Include="源文件\tinyxml2">
       <UniqueIdentifier>{817e8bcc-fff5-4f88-8fe5-053577f72136}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\axmlprinter">
+      <UniqueIdentifier>{5173c950-68de-4325-8695-c7d5fab158da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\axmlprinter">
+      <UniqueIdentifier>{6f40bf67-39fc-46a4-8cf7-39a47434bb12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -36,6 +42,9 @@
     <ClCompile Include="tinyxml2\tinyxml2.cpp">
       <Filter>源文件\tinyxml2</Filter>
     </ClCompile>
+    <ClCompile Include="axmlprinter\AXmlResourceParser.cpp">
+      <Filter>源文件\axmlprinter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manifest\manifestdata.h">
@@ -44,5 +53,31 @@
     <ClInclude Include="tinyxml2\tinyxml2.h">
       <Filter>头文件\tinyxml2</Filter>
     </ClInclude>
+    <ClInclude Include="axmlprinter\AttributeSet.h">
+      <Filter>头文件\axmlprinter</Filter>
+    </ClInclude>
+    <ClInclude Include="axmlprinter\IntReader.h">
+      <Filter>头文件\axmlprinter</Filter>
+    </ClInclude>
+    <ClInclude Include="axmlprinter\StringBlock.h">
+      <Filter>头文件\axmlprinter</Filter>
+    </ClInclude>
+    <ClInclude Include="axmlprinter\XmlResourceParser.h">
+      <Filter>头文件\axmlprinter</Filter>
+    </ClInclude>
+    <ClInclude Include="axmlprinter\AXmlResourceParser.h">
+      <Filter>头文件\axmlprinter</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="axmlprinter\TypedValue.h">
+      <Filter>头文件\axmlprinter</Filter>
+    </None>
+    <None Include="axmlprinter\IntReader.cpp">
+      <Filter>源文件\axmlprinter</Filter>
+    </None>
+    <None Include="axmlprinter\StringBlock.cpp">
+      <Filter>源文件\axmlprinter</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -137,7 +137,7 @@ int main()
 {
 	unzFile zfile;//定义一个unzFile类型的结构体zfile
 				  //定义zip文件的路径，可以使用相对路径
-	char filepath[] = "83fba62fbb414fa09c2110e2b426501e1859a046.apk";
+	char filepath[] = "0ee9fabe68ca6e6cc43e433b4d4a7c55610e7f99.apk";
 	//调用unzOpen64()函数打开zip文件
 	zfile = unzOpen64(filepath);
 	if (zfile == NULL)
@@ -177,7 +177,7 @@ int main()
 	//关闭压缩文件
 	unzClose(zfile);
 
-	//GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
+	GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
 	ManifestData("extract/manifest.xml");
 
 	system("pause");

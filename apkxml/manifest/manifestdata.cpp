@@ -26,6 +26,7 @@ void ManifestData(char* manifest_path)
 		value = root->Attribute("android:versionName");
 		printf("android:versionName : %s\n", value);
 	}
+	printf("----------------------------------------\n");
 
 	/* SDK */
 	printf("uses-sdk\n");
@@ -41,6 +42,7 @@ void ManifestData(char* manifest_path)
 		value = surface->Attribute("android:targetSdkVersion");
 		printf("android:targetSdkVersion : %s\n", value);
 	}
+	printf("----------------------------------------\n");
 
 	/* ACTIVITY */
 	printf("activity\n");
@@ -50,17 +52,13 @@ void ManifestData(char* manifest_path)
 		const char* value = activity->Attribute("android:name");
 		printf("android:name : %s\n", value);
 
-		tinyxml2::XMLElement* actions = activity->FirstChildElement("intent-filter")->FirstChildElement("action");
-		printf("\t action\n");
-		value = actions->Attribute("android:name");
-		printf("\t\t android:name : %s\n", value);
-		
 		activity = activity->NextSiblingElement();
 	}
+	printf("----------------------------------------\n");
 	
 	/* SERVICE */
 	printf("service\n");
-	tinyxml2::XMLElement *service = root->FirstChildElement("service");
+	tinyxml2::XMLElement *service = root->FirstChildElement("application")->FirstChildElement("service");
 	while (service)
 	{
 		const char* value = service->Attribute("android:name");
@@ -68,10 +66,11 @@ void ManifestData(char* manifest_path)
 
 		service = service->NextSiblingElement();
 	}
+	printf("----------------------------------------\n");
 	
 	/* PROVIDER */
 	printf("provider\n");
-	tinyxml2::XMLElement *provider = root->FirstChildElement("provider");
+	tinyxml2::XMLElement *provider = root->FirstChildElement("application")->FirstChildElement("provider");
 	while (provider)
 	{
 		const char* value = provider->Attribute("android:name");
@@ -79,10 +78,11 @@ void ManifestData(char* manifest_path)
 
 		provider = provider->NextSiblingElement();
 	}
+	printf("----------------------------------------\n");
 	
 	/* RECERVER */
 	printf("receiver\n");
-	tinyxml2::XMLElement *receiver = root->FirstChildElement("receiver");
+	tinyxml2::XMLElement *receiver = root->FirstChildElement("application")->FirstChildElement("receiver");
 	while (receiver)
 	{
 		const char* value = receiver->Attribute("android:name");
@@ -90,6 +90,7 @@ void ManifestData(char* manifest_path)
 
 		receiver = receiver->NextSiblingElement();
 	}
+	printf("----------------------------------------\n");
 	
 	/* LIBRARY */
 	printf("uses-library\n");
@@ -101,6 +102,7 @@ void ManifestData(char* manifest_path)
 
 		useslibrary = useslibrary->NextSiblingElement();
 	}
+	printf("----------------------------------------\n");
 	
 	/* PERMISSION */
 	printf("uses-permission\n");
@@ -112,4 +114,5 @@ void ManifestData(char* manifest_path)
 
 		usespermission = usespermission->NextSiblingElement();
 	}
+	printf("----------------------------------------\n");
 }
