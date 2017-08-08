@@ -56,7 +56,7 @@ public:
 	int getLineNumber();
 	std::string getName();
 	std::string getText();
-	char* getTextCharacters(int holderForStartAndLength[]);
+	const char* getTextCharacters(int holderForStartAndLength[]);
 	std::string getNamespace();
 	std::string getPrefix();
 	std::string getPositionDescription();
@@ -105,7 +105,7 @@ public:
 	void setProperty(std::string name, void* value);
 	bool getFeature(std::string feature);
 	void setFeature(std::string name, bool value);
-	StringBlock getStrings();
+	StringBlock* getStrings();
 	///////////////////////////////////
 	int getAttributeOffset(int index);
 	int findAttribute(std::string _namespace, std::string attribute);
@@ -119,8 +119,8 @@ public:
 	* an index of name in m_strings.
 	*/
 private:
+	StringBlock* m_strings;
 	IntReader* m_reader;
-	StringBlock m_strings;
 	bool m_operational = false;
 	
 	int* m_resourceIDs;
@@ -129,7 +129,7 @@ private:
 	int m_event;
 	int m_lineNumber;
 	int m_name;
-	int m__namespaceUri;
+	int m_namespaceUri;
 	int* m_attributes;
 	int m_idAttribute;
 	int m_classAttribute;

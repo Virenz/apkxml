@@ -34,6 +34,7 @@ class StringBlock {
 	* Stream must be at the chunk type.
 	*/
 public:
+
 	static void readCheckType(IntReader reader, int expectedType);
 	static StringBlock* read(IntReader reader);
 
@@ -66,7 +67,6 @@ public:
 	int find(std::string string);
 
 	///////////////////////////////////////////// implementation
-
 	StringBlock();
 
 	/**

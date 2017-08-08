@@ -177,7 +177,7 @@ int main()
 	//¹Ø±ÕÑ¹ËõÎÄ¼ş
 	unzClose(zfile);
 
-	GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
+	//GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
 	ManifestData("extract/manifest.xml");
 
 	system("pause");
