@@ -128,6 +128,12 @@ int extract_currentfile(unzFile zfile, char * extractdirectory)
 			printf("[INFO] 解压当前文件%s成功\n", fileName_WithoutPath);
 		file.write(fileData, fileLength);
 		file.close();
+
+		if (strcmp(fileName_WithoutPath, "AndroidManifest.xml"))
+		{
+
+		}
+
 		free(fileData);
 	}
 	return 0;
