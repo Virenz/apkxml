@@ -1,5 +1,5 @@
 #pragma once
-/*
+/**
 * Copyright 2008 Android4ME
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,10 @@
 * limitations under the License.
 */
 
+#include <string>
 #include "StringBlock.h"
-#include "IntReader.h"
 #include "TypedValue.h"
 #include "XmlResourceParser.h"
-
-#include <string>
 
 /**
 * @author Dmitry Skiba
@@ -209,40 +207,4 @@ public:
 	};
 public:
 	NamespaceStack* m_namespaces = new NamespaceStack();
-
-	/////////////////////////////////// package-visible
-
-	//	final void fetchAttributes(int[] styleableIDs,TypedArray result) {
-	//		result.resetIndices();
-	//		if (m_attributes==null || m_resourceIDs==null) {
-	//			return;
-	//		}
-	//		boolean needstd::strings=false;
-	//		for (int i=0,e=styleableIDs.length;i!=e;++i) {
-	//			int id=styleableIDs[i];
-	//			for (int o=0;o!=m_attributes.length;o+=ATTRIBUTE_LENGHT) {
-	//				int name=m_attributes[o+ATTRIBUTE_IX_NAME];
-	//				if (name>=m_resourceIDs.length ||
-	//					m_resourceIDs[name]!=id)
-	//				{
-	//					continue;
-	//				}
-	//				int valueType=m_attributes[o+ATTRIBUTE_IX_VALUE_TYPE];
-	//				int valueData;
-	//				int assetCookie;
-	//				if (valueType==TypedValue.TYPE_STRING) {
-	//					valueData=m_attributes[o+ATTRIBUTE_IX_VALUE_STRING];
-	//					assetCookie=-1;
-	//					needstd::strings=true;
-	//				} else {
-	//					valueData=m_attributes[o+ATTRIBUTE_IX_VALUE_DATA];
-	//					assetCookie=0;
-	//				}
-	//				result.addValue(i,valueType,valueData,assetCookie,id,0);
-	//			}
-	//		}
-	//		if (needstd::strings) {
-	//			result.setstd::strings(m_strings);
-	//		}
-	//	}
 };

@@ -1,5 +1,5 @@
 #pragma once
-/*
+/**
 * Copyright 2008 Android4ME
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
