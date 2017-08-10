@@ -111,7 +111,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="axmlprinter\axmlprinter.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="manifest\manifestdata.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
