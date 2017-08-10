@@ -42,6 +42,9 @@
     <ClCompile Include="tinyxml2\tinyxml2.cpp">
       <Filter>源文件\tinyxml2</Filter>
     </ClCompile>
+    <ClCompile Include="axmlprinter\axmlparse.cpp">
+      <Filter>源文件\axmlprinter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manifest\manifestdata.h">
@@ -50,10 +53,7 @@
     <ClInclude Include="tinyxml2\tinyxml2.h">
       <Filter>头文件\tinyxml2</Filter>
     </ClInclude>
-    <ClInclude Include="axmlprinter\Utils.h">
-      <Filter>头文件\axmlprinter</Filter>
-    </ClInclude>
-    <ClInclude Include="axmlprinter\AttributeData.h">
+    <ClInclude Include="axmlprinter\axmlparse.h">
       <Filter>头文件\axmlprinter</Filter>
     </ClInclude>
   </ItemGroup>
