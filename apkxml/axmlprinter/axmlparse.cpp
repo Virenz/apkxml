@@ -24,7 +24,7 @@ void parseXmlContent(){
                 parseEndTagChunk();
                 break;
             case 0x00100101:
-            parseEndNamespaceChunk();
+				parseEndNamespaceChunk();
                 isEnd=1;
                 break;
             default:
@@ -41,7 +41,6 @@ void parseFileHearder(){
     }else{
         puts("header read error!");
     }
-
 }
 
 void parseStringChunk(){
@@ -116,6 +115,84 @@ void printStringItem(StringItem* item){
             putchar(c);
     }
     puts("");
+}
+
+std::string FormatString(const char *lpcszFormat, ...)
+{
+	char *pszStr = NULL;
+	if (NULL != lpcszFormat)
+	{
+		va_list marker = NULL;
+		va_start(marker, lpcszFormat); //初始化变量参数  
+		size_t nLength = _vscprintf(lpcszFormat, marker) + 1; //获取格式化字符串长度  
+		pszStr = new char[nLength];
+		memset(pszStr, '\0', nLength);
+		_vsnprintf_s(pszStr, nLength, nLength, lpcszFormat, marker);
+		va_end(marker); //重置变量参数  
+	}
+	std::string strResult(pszStr);
+	delete[]pszStr;
+	return strResult;
+}
+
+std::string getStringItem(StringItem* item) {
+	char *chars = (char*)item->chars;
+	char *p = new char[item->charNum + 1];
+	int i;
+	for (i = 0; i < item->charNum; ++i) {
+		char c = *(chars + i * 2);
+		if (c != 0)
+			sprintf_s(p + i, 2, "%c", c);
+	}
+	p[item->charNum] = 0;
+	std::string str1(p);
+	delete[] p;
+	return str1;	
+}
+
+std::string getPackage(int32_t id) 
+{
+	if (id >> 24 == 1) {
+		return "android:";
+	}
+	return "";
+}
+
+std::string getAttributeData(AttrItem* data) 
+{
+	if (data->type >> 24 == ATTR_STRING) {
+		return "";
+	}
+	if (data->type >> 24 == ATTR_ATTRIBUTE) {
+		return FormatString("?%s%08X", getPackage(data->data).c_str(), data->data);
+	}
+	if (data->type >> 24 == ATTR_REFERENCE) {
+		return FormatString("@%s%08X", getPackage(data->data).c_str(), data->data);
+	}
+	if (data->type >> 24 == ATTR_FLOAT) {
+		return FormatString("%f", data->data);
+	}
+	if (data->type >> 24 == ATTR_HEX) {
+		return FormatString("0x%08X", data->data);
+	}
+	if (data->type >> 24 == ATTR_BOOLEAN) {
+		return data->data != 0 ? "true" : "false";
+	}
+	if (data->type >> 24 == ATTR_DIMENSION) {
+		/*return Float.toString(complexToFloat(data.data)) +
+			DIMENSION_UNITS[data.data & COMPLEX_UNIT_MASK];*/
+	}
+	if (data->type >> 24 == ATTR_FRACTION) {
+		/*return Float.toString(complexToFloat(data.data)) +
+			FRACTION_UNITS[data.data & COMPLEX_UNIT_MASK];*/
+	}
+	if (data->type >> 24 >= ATTR_FIRSTCOLOR && data->type >> 24 <= ATTR_LASTCOLOR) {
+		return FormatString("#%08X", data->data);
+	}
+	if (data->type >> 24 >= ATTR_FIRSTINT && data->type >> 24 <= ATTR_LASTINT) {
+		return FormatString("%d", data->data);
+	}
+	return FormatString("<0x%X, type 0x%02X>", data->data, data->type);
 }
 
 void parseResourceIDChunk(){
@@ -266,19 +343,72 @@ char* getAttrType(int32_t type){
 void writeFormatXmlToFile()
 {
 	FILE *file;
-	file = fopen("manifest-format.xml", "wb");
-	if (file != NULL) {
-		fwrite;
+	std::string xmlstr;
+	file = fopen("extract/manifest-format.xml", "wb");
+
+	xmlstr.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+	xmlstr.append("\n");
+
+	if (file != NULL) {	
 		XMlContentChunk* p = mainXML.xmlContentChunk.next;                            //将头节点的指针给予临时节点p
 		while (NULL != p)                                //节点p不为空，循环
 		{
-			StartTagChunk* tagChunk = (StartTagChunk*)p->TagChunk;
-			printf("%d ", tagChunk->attrs->name);
+			if (p->type == TAG_START)
+			{
+				StartTagChunk* tagChunk = (StartTagChunk*)p->TagChunk;
+				if (tagChunk->name != -1)
+				{
+					if (getStringItem(mainXML.stringChunk.stringPool + tagChunk->name) == "manifest")
+					{
+						xmlstr.append("<manifest xmlns:");
+						xmlstr.append(getStringItem(mainXML.stringChunk.stringPool + mainXML.startNamespaceChunk.prefix) + "=");
+						xmlstr.append("\"" + getStringItem(mainXML.stringChunk.stringPool + mainXML.startNamespaceChunk.uri) + "\"");
+						xmlstr.append("\n");
+
+					}
+					else
+					{
+						xmlstr.append("<" + getStringItem(mainXML.stringChunk.stringPool + tagChunk->name));
+						xmlstr.append("\n");
+					}
+				}
+				for (int i = 0; i < tagChunk->atrrCount; ++i)
+				{
+					AttrItem* attrItem = tagChunk->attrs + i;
+					if (attrItem->spaceUri != -1)
+					{
+						xmlstr.append("android:" + getStringItem(mainXML.stringChunk.stringPool + attrItem->name) 
+							+ "=");
+					}
+					else
+					{
+						xmlstr.append(getStringItem(mainXML.stringChunk.stringPool + attrItem->name) + "=");
+					}
+					//当type为String时，data与valueStr共同代表字符串的在StringPool里的偏移值
+					if (attrItem->type >> 24 == ATTR_STRING) 
+					{
+						xmlstr.append("\"" + getStringItem(mainXML.stringChunk.stringPool + attrItem->data) + "\"");
+					}
+					else 
+					{
+						xmlstr.append("\"" + getAttributeData(attrItem) + "\"");
+					}
+					xmlstr.append("\n");
+				}
+				xmlstr.append(">");
+				xmlstr.append("\n");
+			}
+			else
+			{
+				EndTagChunk *tagEndChunk = (EndTagChunk*)p->TagChunk;
+				xmlstr.append("</" + getStringItem(mainXML.stringChunk.stringPool + tagEndChunk->name) + ">");
+				xmlstr.append("\n");
+			}
 			p = p->next;
 		}
-		printf("\n");
+		fwrite(xmlstr.c_str(), xmlstr.length(), 1, file);
+		fclose(file);
 		return;
-		
 	}
 }
 

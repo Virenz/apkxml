@@ -179,7 +179,7 @@ int main()
 	//unzClose(zfile);
 
 	//GetManifest("java", "Tools/AXMLPrinter2.jar", "extract/");
-	ManifestData("extract/AndroidManifest.xml");
+	ManifestData("extract/AndroidManifest1.xml");
 
 	system("pause");
 	return 0;

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdarg.h>
+#include <string>
 
 enum AttrType {
 	ATTR_NULL = 0,
@@ -129,7 +131,6 @@ typedef struct _MainfestXML {
 
 void parseFileHearder();
 void parseStringChunk();
-void printStringItem(StringItem*);
 void parseResourceIDChunk();
 void parseStartNamespaceChunk();
 void parseEndNamespaceChunk();
@@ -144,5 +145,11 @@ void freeXMlContentChunk(XMlContentChunk*);
 
 void initFile(int, char *path);
 void freeFile();
+
+void printStringItem(StringItem*);					// ´òÓ¡×Ö·û´®
+std::string getStringItem(StringItem* item);		// »ñÈ¡×Ö·û´®ÄÚÈÝ
+std::string getAttributeData(AttrItem* data);
+std::string FormatString(const char *lpcszFormat, ...);
+std::string getPackage(int32_t id);
 
 #endif
