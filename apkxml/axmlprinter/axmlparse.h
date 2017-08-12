@@ -7,31 +7,6 @@
 #include <stdarg.h>
 #include <string>
 
-enum AttrType {
-	ATTR_NULL = 0,
-	ATTR_REFERENCE = 1,
-	ATTR_ATTRIBUTE = 2,
-	ATTR_STRING = 3,
-	ATTR_FLOAT = 4,
-	ATTR_DIMENSION = 5,
-	ATTR_FRACTION = 6,
-	ATTR_FIRSTINT = 16,
-	ATTR_DEC = 16,
-	ATTR_HEX = 17,
-	ATTR_BOOLEAN = 18,
-	ATTR_FIRSTCOLOR = 28,
-	ATTR_ARGB8 = 28,
-	ATTR_RGB8 = 29,
-	ATTR_ARGB4 = 30,
-	ATTR_RGB4 = 31,
-	ATTR_LASTCOLOR = 31,
-	ATTR_LASTINT = 31,
-};
-
-enum TagType {
-	TAG_START, TAG_END,
-};
-
 ///文件头
 typedef struct FileHeader {
 	int32_t magicNumber;
@@ -129,27 +104,102 @@ typedef struct _MainfestXML {
 	EndNamespaceChunk endNamespaceChunk;
 }MainfestXML;
 
-void parseFileHearder();
-void parseStringChunk();
-void parseResourceIDChunk();
-void parseStartNamespaceChunk();
-void parseEndNamespaceChunk();
-void parseStartTagChunk();
-char* getAttrType(int32_t);
-void parseEndTagChunk();
-void addTagChunk(int, void*);
-void parseXmlContent();
-void writeFormatXmlToFile();
-void freeMainfestXML();
-void freeXMlContentChunk(XMlContentChunk*);
+class AXMLParse
+{
+public:
+	AXMLParse();
+	~AXMLParse();
 
-void initFile(int, char *path);
-void freeFile();
+	void startParseString(void* read_string);
+	void startParseFile(char *read_path);
+	void writeFormatXmlToFile(char *write_path);
+	void closeParse();
 
-void printStringItem(StringItem*);					// 打印字符串
-std::string getStringItem(StringItem* item);		// 获取字符串内容
-std::string getAttributeData(AttrItem* data);
-std::string FormatString(const char *lpcszFormat, ...);
-std::string getPackage(int32_t id);
+private:
+
+	void initFile(char *read_path);
+	// 解析Manifest.xml的文件头
+	void parseFileHearder();
+	// 解析Manifest.xml的所有字符串
+	void parseStringChunk();
+
+	void parseResourceIDChunk();
+
+	void parseStartNamespaceChunk();
+	void parseEndNamespaceChunk();
+
+	void parseStartTagChunk();
+	void parseEndTagChunk();
+
+	void addTagChunk(int, void*);
+
+	void parseXmlContent();
+
+	void freeFile();
+	void freeMainfestXML();
+	void freeXMlContentChunk(XMlContentChunk*);
+
+	void printStringItem(StringItem*);					// 打印字符串
+	std::string getStringItem(StringItem* item);		// 获取字符串内容
+	std::string getAttributeData(AttrItem* data);
+	std::string FormatString(const char *lpcszFormat, ...);
+	std::string getPackage(int32_t id);
+	char* getAttrType(int32_t type);
+	float complexToFloat(int complex);
+
+	enum AttrType {
+		ATTR_NULL = 0,
+		ATTR_REFERENCE = 1,
+		ATTR_ATTRIBUTE = 2,
+		ATTR_STRING = 3,
+		ATTR_FLOAT = 4,
+		ATTR_DIMENSION = 5,
+		ATTR_FRACTION = 6,
+		ATTR_FIRSTINT = 16,
+		ATTR_DEC = 16,
+		ATTR_HEX = 17,
+		ATTR_BOOLEAN = 18,
+		ATTR_FIRSTCOLOR = 28,
+		ATTR_ARGB8 = 28,
+		ATTR_RGB8 = 29,
+		ATTR_ARGB4 = 30,
+		ATTR_RGB4 = 31,
+		ATTR_LASTCOLOR = 31,
+		ATTR_LASTINT = 31,
+	};
+
+	enum TagType {
+		TAG_START, TAG_END,
+	};
+
+	int
+		COMPLEX_UNIT_PX = 0,
+		COMPLEX_UNIT_DIP = 1,
+		COMPLEX_UNIT_SP = 2,
+		COMPLEX_UNIT_PT = 3,
+		COMPLEX_UNIT_IN = 4,
+		COMPLEX_UNIT_MM = 5,
+		COMPLEX_UNIT_SHIFT = 0,
+		COMPLEX_UNIT_MASK = 15,
+		COMPLEX_UNIT_FRACTION = 0,
+		COMPLEX_UNIT_FRACTION_PARENT = 1,
+		COMPLEX_RADIX_23p0 = 0,
+		COMPLEX_RADIX_16p7 = 1,
+		COMPLEX_RADIX_8p15 = 2,
+		COMPLEX_RADIX_0p23 = 3,
+		COMPLEX_RADIX_SHIFT = 4,
+		COMPLEX_RADIX_MASK = 3,
+		COMPLEX_MANTISSA_SHIFT = 8,
+		COMPLEX_MANTISSA_MASK = 0xFFFFFF;
+
+	float RADIX_MULTS[4] = {0.00390625F,3.051758E-005F,1.192093E-007F,4.656613E-010F};
+	std::string DIMENSION_UNITS[8] = {"px","dip","sp","pt","in","mm","",""};
+	std::string FRACTION_UNITS[8] = {"%","%p","","","","","",""};
+
+	///定义主体结构
+	MainfestXML mainXML;
+	///操作文件
+	FILE *fp;
+};
 
 #endif

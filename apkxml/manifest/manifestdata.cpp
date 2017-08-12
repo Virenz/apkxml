@@ -8,18 +8,6 @@ using namespace std;
 
 void ManifestData(char* manifest_path)
 {
-	initFile(2, manifest_path);
-	parseFileHearder();
-	parseStringChunk();
-	parseResourceIDChunk();
-	parseStartNamespaceChunk();
-	parseXmlContent();
-
-	writeFormatXmlToFile();
-
-	freeFile();
-	freeMainfestXML();
-
 	//tinyxml2::XMLDocument doc;
 	//
 	//if (doc.LoadFile(manifest_path) != 0)
