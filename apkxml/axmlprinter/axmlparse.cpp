@@ -342,74 +342,74 @@ char* getAttrType(int32_t type){
 
 void writeFormatXmlToFile()
 {
-	FILE *file;
 	std::string xmlstr;
-	file = fopen("extract/manifest-format.xml", "wb");
 
 	xmlstr.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	xmlstr.append("\n");
 
-	if (file != NULL) {	
-		XMlContentChunk* p = mainXML.xmlContentChunk.next;                            //将头节点的指针给予临时节点p
-		while (NULL != p)                                //节点p不为空，循环
+	XMlContentChunk* p = mainXML.xmlContentChunk.next;                            //将头节点的指针给予临时节点p
+	while (NULL != p)                                //节点p不为空，循环
+	{
+		if (p->type == TAG_START)
 		{
-			if (p->type == TAG_START)
+			StartTagChunk* tagChunk = (StartTagChunk*)p->TagChunk;
+			if (tagChunk->name != -1)
 			{
-				StartTagChunk* tagChunk = (StartTagChunk*)p->TagChunk;
-				if (tagChunk->name != -1)
+				if (getStringItem(mainXML.stringChunk.stringPool + tagChunk->name) == "manifest")
 				{
-					if (getStringItem(mainXML.stringChunk.stringPool + tagChunk->name) == "manifest")
-					{
-						xmlstr.append("<manifest xmlns:");
-						xmlstr.append(getStringItem(mainXML.stringChunk.stringPool + mainXML.startNamespaceChunk.prefix) + "=");
-						xmlstr.append("\"" + getStringItem(mainXML.stringChunk.stringPool + mainXML.startNamespaceChunk.uri) + "\"");
-						xmlstr.append("\n");
-
-					}
-					else
-					{
-						xmlstr.append("<" + getStringItem(mainXML.stringChunk.stringPool + tagChunk->name));
-						xmlstr.append("\n");
-					}
-				}
-				for (int i = 0; i < tagChunk->atrrCount; ++i)
-				{
-					AttrItem* attrItem = tagChunk->attrs + i;
-					if (attrItem->spaceUri != -1)
-					{
-						xmlstr.append("android:" + getStringItem(mainXML.stringChunk.stringPool + attrItem->name) 
-							+ "=");
-					}
-					else
-					{
-						xmlstr.append(getStringItem(mainXML.stringChunk.stringPool + attrItem->name) + "=");
-					}
-					//当type为String时，data与valueStr共同代表字符串的在StringPool里的偏移值
-					if (attrItem->type >> 24 == ATTR_STRING) 
-					{
-						xmlstr.append("\"" + getStringItem(mainXML.stringChunk.stringPool + attrItem->data) + "\"");
-					}
-					else 
-					{
-						xmlstr.append("\"" + getAttributeData(attrItem) + "\"");
-					}
+					xmlstr.append("<manifest xmlns:");
+					xmlstr.append(getStringItem(mainXML.stringChunk.stringPool + mainXML.startNamespaceChunk.prefix) + "=");
+					xmlstr.append("\"" + getStringItem(mainXML.stringChunk.stringPool + mainXML.startNamespaceChunk.uri) + "\"");
 					xmlstr.append("\n");
 				}
-				xmlstr.append(">");
-				xmlstr.append("\n");
+				else
+				{
+					xmlstr.append("<" + getStringItem(mainXML.stringChunk.stringPool + tagChunk->name));
+					xmlstr.append("\n");
+				}
 			}
-			else
+			for (int i = 0; i < tagChunk->atrrCount; ++i)
 			{
-				EndTagChunk *tagEndChunk = (EndTagChunk*)p->TagChunk;
-				xmlstr.append("</" + getStringItem(mainXML.stringChunk.stringPool + tagEndChunk->name) + ">");
+				AttrItem* attrItem = tagChunk->attrs + i;
+				if (attrItem->spaceUri != -1)
+				{
+					xmlstr.append("android:" + getStringItem(mainXML.stringChunk.stringPool + attrItem->name) 
+						+ "=");
+				}
+				else
+				{
+					xmlstr.append(getStringItem(mainXML.stringChunk.stringPool + attrItem->name) + "=");
+				}
+				//当type为String时，data与valueStr共同代表字符串的在StringPool里的偏移值
+				if (attrItem->type >> 24 == ATTR_STRING) 
+				{
+					xmlstr.append("\"" + getStringItem(mainXML.stringChunk.stringPool + attrItem->data) + "\"");
+				}
+				else 
+				{
+					xmlstr.append("\"" + getAttributeData(attrItem) + "\"");
+				}
 				xmlstr.append("\n");
 			}
-			p = p->next;
+			xmlstr.append(">");
+			xmlstr.append("\n");
 		}
-		fwrite(xmlstr.c_str(), xmlstr.length(), 1, file);
-		fclose(file);
-		return;
+		else
+		{
+			EndTagChunk *tagEndChunk = (EndTagChunk*)p->TagChunk;
+			xmlstr.append("</" + getStringItem(mainXML.stringChunk.stringPool + tagEndChunk->name) + ">");
+			xmlstr.append("\n");
+		}
+		p = p->next;
 	}
+	FILE *file;
+	file = fopen("extract/manifest-format.xml", "wb");
+	if (file != NULL)
+	{
+		fwrite(xmlstr.c_str(), xmlstr.length(), 1, file);
+	}
+	fclose(file);
+	return;
 }
 
 void freeMainfestXML(){
